@@ -4,6 +4,8 @@ class Play extends Phaser.Scene{
     }
     timeLimit = game.settings.gameTimer/1000;
     timeText;
+    oneSec;
+
 
 
     preload() {
@@ -96,21 +98,18 @@ class Play extends Phaser.Scene{
             },
             fixedWidth: 100
         }
+        //create timer +15 pts
         //create clock
         this.timeText = this.add.text(571, 54, '', clockConfig).setOrigin(1,0);
-        this.timeText.text = this.timeLimit;
+        this.timeText.text = game.settings.gameTimer/1000;
         //create 1 sec timer for decrementing clock
         var oneSec = this.time.addEvent({
             delay: 1000,
-            callback: onEvent,
+            callback: this.onEvent,
             callbackScope: this,
-            repeat: this.timeLimit,
+            repeat: (game.settings.gameTimer/1000)-1,
         });
 
-        //****onEvent function is after update(), it's here right now so i dont have to post 2 screenshots
-        //onEvent(){
-        //    this.timeText.text--;
-        //}
 
     }
 
@@ -156,7 +155,7 @@ class Play extends Phaser.Scene{
 
     }
 
-    function onEvent(){
+    onEvent(){
         this.timeText.text--;
     }
 
