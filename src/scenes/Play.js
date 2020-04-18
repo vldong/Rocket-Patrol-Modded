@@ -2,6 +2,9 @@ class Play extends Phaser.Scene{
     constructor() {
         super("playScene");
     }
+    timeLimit = game.settings.gameTimer/1000;
+    timeText;
+
 
     preload() {
         //load images and tile sprite
@@ -72,6 +75,7 @@ class Play extends Phaser.Scene{
         this.scoreLeft = this.add.text(69, 54, this.p1Score, scoreConfig);
         //game over flag
         this.gameOver = false;
+
         //create 60 second play clock
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, ()=>{
@@ -79,6 +83,35 @@ class Play extends Phaser.Scene{
             this.add.text(game.config.width/2, game.config.height/2 + 64, '(F)ire to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
+        //clock display
+        let clockConfig = {
+            fontFamily: 'Courier',
+            fontSize: "28px",
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+        //create clock
+        this.timeText = this.add.text(571, 54, '', clockConfig).setOrigin(1,0);
+        this.timeText.text = this.timeLimit;
+        //create 1 sec timer for decrementing clock
+        var oneSec = this.time.addEvent({
+            delay: 1000,
+            callback: onEvent,
+            callbackScope: this,
+            repeat: this.timeLimit,
+        });
+
+        //****onEvent function is after update(), it's here right now so i dont have to post 2 screenshots
+        //onEvent(){
+        //    this.timeText.text--;
+        //}
+
     }
 
     update() {
@@ -100,6 +133,7 @@ class Play extends Phaser.Scene{
             this.ship02.update();
             this.ship03.update();
             this.ship04.update();
+            this.displayTimeRemaining;
         }
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
@@ -118,6 +152,12 @@ class Play extends Phaser.Scene{
             this.p1Rocket.reset();
             this.shipExplode(this.ship04);
         }
+
+
+    }
+
+    function onEvent(){
+        this.timeText.text--;
     }
 
     checkCollision(rocket, ship) {
@@ -148,6 +188,7 @@ class Play extends Phaser.Scene{
         //ship explode sound
         this.sound.play('sfx_explosion');
     }
+
 }
 //python -m http.server
 //then go to browser and go to localhost:8000
