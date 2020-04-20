@@ -13,12 +13,13 @@ class Play extends Phaser.Scene{
         this.load.image("rocket", "./assets/rocket.png");
         this.load.image("spaceship", "./assets/spaceship.png");
         this.load.image("scout", "./assets/scout.png");
-        //new starfield +10
-        //parallax scrolling +15
+        //new starfield +10 PTS
+        //parallax scrolling +15 PTS
         this.load.image("starfield01", './assets/starfield.png');
         this.load.image("starfield02", './assets/starfield2.png');
         this.load.image("starfield03", './assets/starfield3.png');
         this.load.spritesheet("explosion", './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+        this.load.audio("music", './assets/bgmusic.mp3');
     }
 
     create() {
@@ -46,7 +47,7 @@ class Play extends Phaser.Scene{
         this.ship03 = new Spaceship(this, game.config.width , 260, 'spaceship', 0, 10).setOrigin(0, 0);
 
         //add scout
-        //NEW SHIP, +25 pt
+        //NEW SHIP, +25 PTS
         this.ship04 = new Scout(this, game.config.width, 116, 'scout', 0, 50).setOrigin(0, 0);
 
         //define keyboard keys
@@ -98,7 +99,7 @@ class Play extends Phaser.Scene{
             },
             fixedWidth: 100
         }
-        //create timer +15 pts
+        //create timer +15 PTS
         //create clock
         this.timeText = this.add.text(571, 54, '', clockConfig).setOrigin(1,0);
         this.timeText.text = game.settings.gameTimer/1000;
@@ -109,11 +110,43 @@ class Play extends Phaser.Scene{
             callbackScope: this,
             repeat: (game.settings.gameTimer/1000)-1,
         });
-
-
+        //create FIRE! UI text +10 PTS
+        //display
+        let fireConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#FFF200',
+            color: '#843605',
+            align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+        this.fireMid = this.add.text(320, 54, 'FIRE!', fireConfig).setOrigin(0.5, 0);
+        //create background music +10 PTS
+        //music config for loop
+        let soundConfig = {
+            mute: false,
+            volume: 1,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: true,
+            delay: 0
+        }
+        let bg = this.sound.add('music', soundConfig);
+        bg.play();
+    
     }
 
     update() {
+        if (this.p1Rocket.isFiring == true){
+            this.fireMid.alpha = 0;
+        } else {
+            this.fireMid.alpha = 1;
+        }
         //check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)){
             this.scene.restart(this.p1Score);
