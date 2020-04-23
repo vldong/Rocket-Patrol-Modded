@@ -16,3 +16,12 @@ let game = new Phaser.Game(config);
 
 //reserve some keyboard variables
 let keyF, keyLEFT, keyRIGHT;
+
+//mods:
+//New Menu (15)
+//New background tilesprite (10)
+//parallax scrolling (15)
+//new ship (25)
+//timer (15)
+//Fire! UI text (10)
+//background music (10)

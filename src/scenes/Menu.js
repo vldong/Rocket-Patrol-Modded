@@ -39,7 +39,7 @@ class Menu extends Phaser.Scene{
         let centerY = game.config.height/2;
         let textSpacer = 64;
 
-        //show background image
+        //show background image, NEW MENU +15 PTS
         this.add.image(centerX, centerY, 'bgpic').setOrigin(0.5);
 
 
